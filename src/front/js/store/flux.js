@@ -241,13 +241,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 				    .catch((error) => console.error("Error during signup:", error))
 				},
-				checkProducerExists: (email) => {
+				checkProducerExists: (email, password) => {
 					return fetch(process.env.BACKEND_URL + "/api/checkProducer", {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json;charset=UTF-8'
 						},
-						body: JSON.stringify({ email })
+						body: JSON.stringify({ email, password })
 					})
 					.then(response => response.json())
 					.then(data => data.exists);

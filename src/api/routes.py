@@ -360,15 +360,19 @@ def handle_signup():
 ####CHECK IF PRODUCER EXIST####
 @api.route('/checkProducer', methods=['POST'])
 def check_PRODUCER_exists():
-    email = request.json.get('email')
-
+    email = request.json.get("email")
+    password = request.json.get("password")
     if not email:
         return jsonify(message="Email is required"), 400
+    if not password:
+        return jsonify(message="Password is required"), 400
 
-    if email:
-        existing_user = Producer.query.filter_by(email=email).first()
-        if existing_user:
+    existing_user = Producer.query.filter_by(email=email).first()
+    if existing_user:
+        if password == existing_user.password:
             return jsonify(exists=True, message="Email already exists"), 200
+        else:
+            return jsonify(exists=False, message="Incorrect password"), 401
 
     return jsonify(exists=False), 200
 
@@ -404,9 +408,11 @@ def handle_login():
     if producer is None:
         print("email does not exist")
         return jsonify({"msg": "Incorrect email or email does not exist"}), 401
-    if producer.email != email or producer.password != password:
+    if producer.email != email:
         print("incorrect password or email")
         return jsonify({"msg": "Password or email incorrect"}), 401
+    if producer.password != password:
+        return jsonify({"msg": "Contraseña incorrecta"}), 401
     
     access_token = create_access_token(identity=email)
     if producer.brand_name is None:
