@@ -22,7 +22,7 @@ export const ProducerInfoForm = () => {
         
      },[store.producers, producerId])//  
     
-
+     
     const handleEdition = (e) => {
         e.preventDefault();
         actions.addProducerInfo(producerId, producerInfo)

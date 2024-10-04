@@ -1,23 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useNavigate, Navigate, useParams } from "react-router-dom";
+import rigoImageUrl from "../../img/rigo-baby.jpg";
+import { Product } from "./ViewProducts";
 
 export const ProducerView = () => {
 
-    const { actions, store } = useContext(Context)
-    const { producerId } = useParams()
-    const autenticate = store.isLogedIn
-
-    // const loggedInProducer = store.producers[0]; // Assuming you stored the logged-in producer in the first index
+    const { actions, store } = useContext(Context);
+    const { producerId } = useParams();
+    const navigate = useNavigate();
+    const [ cautionDeleting, setCautionDeleting ] = useState(false);
+    
+    const autenticate = store.isLogedIn;
 
     if (!autenticate){
         return <Navigate to="/producer/login" />
     }
 
     useEffect(() => {
-        actions.getProducer(producerId); 
-    }, []);    
-
+        actions.getProducer(producerId);
+        actions.getProducts()
+    }, []);
+    
+    const handleCautionDelete = () => {
+        setCautionDeleting(true) 
+    }
+    
+    const handleDelete = () => {
+        actions.deleteProduct(id)
+        
+    }
+    const handleEdit = () => {
+        console.log("go to edit product view");
+        
+    }
 
     return (
         <>
@@ -30,8 +46,17 @@ export const ProducerView = () => {
             <Link to={"/producer/form/" + producer.id}>
                 <button type="button" className="edit btn btn-warning">Edita tu información o de la empresa aquí</button>
             </Link>
-        </div>
-        )}
+
+            {store.products.length > 0 ? (
+                <Product />
+            ) : (
+                <button className="btn btn-primary" onClick={()=>navigate(`/producer/dashboard/${producerId}/newproduct`)()}>Añade nuevos productos</button>
+            )}
+            </div>
+
+        )} 
+        
         </>
+
     )
 };

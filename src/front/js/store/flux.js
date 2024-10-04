@@ -114,12 +114,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch((error) => console.error(error));
 			},
 			addProducts:(newProduct) => {
-                const raw = JSON.stringify({
-                    "origin": newProduct.origin,
-                    "description": newProduct.description,
-                    "name": newProduct.name,
-                    "price": newProduct.price
-                  });
+				const store = setStore();
+                const raw = JSON.stringify(
+					newProduct
+				// 	{
+				// 	"name": newProduct.name,
+                //     "price": newProduct.price,
+                //     "description": newProduct.description,
+				// 	"origin": newProduct.origin,
+				// 	"weight": newProduct.weight,
+				// 	"volume": newProduct.volume,
+				// 	"minimum": newProduct.minimum,
+				// 	"category": newProduct.category,
+                //   }
+				);
 
                   const requestOptions = {
                     method: "POST",
@@ -131,13 +139,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                   fetch(process.env.BACKEND_URL + "/api/product", requestOptions)
                     .then((response) => response.json())
-                    .then((result) => 
-                        getActions().getProducts()
+                    .then((result) => {
+						console.log(result);
+						const newProduct = { email, password, id: data.id };
+						setStore({
+							producers: [...store.products, newProduct]});
+						console.log("data from flux Signup",data);
+						console.log("id from flux Signup",data.id);
+						return data.id;
+                        // getActions().getProducts()
+					}
                     )
                     .catch((error) => console.error(error));
             },
 			//Estos son categorías!!
-			functionCategories: ()=>
+			getCategories: ()=>
 			{	const store = getStore()
 				const requestOptions = {
 					method: "GET",
@@ -147,7 +163,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  fetch(process.env.BACKEND_URL + "/api/categories", requestOptions)
 					.then((response) => response.json())
 					.then((result) => {console.log (result),
-						setStore({categories: result} ) }) 
+						setStore({categories: result}) }) 
 					.catch((error) => console.error(error));
 				
 			},
@@ -176,17 +192,19 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 			
 			addCategory: (newCategoryName) => {
+				const store = setStore()
 				fetch(process.env.BACKEND_URL + "/api/categories", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
 					},
-					body: JSON.stringify({ categorie: newCategoryName })
+					body: JSON.stringify({ "categorie": newCategoryName })
 				})
 				.then((response) => response.json())
 				.then((result) => {
-					console.log(result);
-					getActions().functionCategories();
+					{console.log (result),
+						setStore({
+							categories: [...store.categories, newCategoryName]}) };
 				})
 				.catch((error) => console.error(error));
 			},

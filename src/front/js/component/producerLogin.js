@@ -44,15 +44,13 @@ export const ProducerLogin = () => {
                 setShowExists(true);
                 return;
             }
-
+            setLoginIn(true)
             actions.producerLogin(email, password).then(data => {
                 // console.log("data from producerlogin", data);
                 // console.log("Navigating to producer view");
                 if (data.isVerify) {
-                    setLoginIn(true)
-                    setTimeout(() => {
-                        navigate(`/producer/dashboard/${data.producerId}`)
-                    }, "1500");
+                    setLoginIn(false)
+                    navigate(`/producer/dashboard/${data.producerId}`)
                     
                 } else {
                     navigate(`/producer/form/${data.producerId}`)

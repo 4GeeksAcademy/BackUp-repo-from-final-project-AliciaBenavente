@@ -43,7 +43,7 @@ const Layout = () => {
                         <Route element={<EditProducer />} path="/producer/edit/:producerId" />
                         <Route element={<ProducerSignup />} path="/producer/signup" />
                         <Route element={<ProducerView />} path="/producer/dashboard/:producerId" />
-                        <Route element={<AddProduct />} path="/producer/dashboard/newproduct" />
+                        <Route element={<AddProduct />} path="/producer/dashboard/:producerId/newproduct" />
                         <Route element={<ProducerInfoForm/>} path="/producer/form/:producerId" />
                         <Route element={<Categories />} path="/categories" />
                         <Route element={<Single />} path="/single/:theid" />

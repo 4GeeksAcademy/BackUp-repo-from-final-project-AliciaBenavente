@@ -2,22 +2,25 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export const Navbar = () => {
 	const { store, actions } = useContext(Context);
+	const { producerId } = useParams()
 	const navigate = useNavigate();
 
 	
 
 	function handleLogout () {
 		console.log("Loging out");
-		actions.producerLogout()
+		localStorage.clear();
+		actions.producerLogout();
 		navigate("/producer/login")
 	}
 
 	function handleNewProduct () {
 		console.log("Going to add new product");
-		navigate("/producer/dashboard/newproduct")
+		navigate(`/producer/dashboard/${localStorage.getItem("producerId")}/newproduct`)
 	}
 
 	
